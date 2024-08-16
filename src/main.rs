@@ -1,10 +1,15 @@
 fn main() {
-    println!("{}", fibonacci(45));
+    println!("{}", fibonacci(185));
 }
 
 fn fibonacci(size: u128) -> u128 {
-    if size < 2 {
-        return 1;
+    let mut a = 0;
+    let mut b = 1;
+    for _ in 0..size {
+        let tmp = a;
+        a = b;
+        b = a + tmp;
     }
-    return fibonacci(size-1) + fibonacci(size-2);
+
+    b
 }
