@@ -1,17 +1,19 @@
 
 
 fn main() {
-    let shape = Cuboid{
-        width: request_length("width"),
-        height: request_length("height")
-    };
-    let shape_variation = CuboidVar::return_variation(&shape);
+    let several_pos =  PartOfSpeech::MultiplePOS(vec![PartOfSpeech::Noun(true), PartOfSpeech::Noun(false)]);
 
-    println!("The shape's variation is a {}.", 
-        match shape_variation {
-            CuboidVar::Square => "square",
-            CuboidVar::Rectangle => "rectangle" 
-        }
+    println!("There are {} nouns of which {} are phrasal.", several_pos.return_multiple()
+        .unwrap_or_else(|| vec![])
+        .len(),
+        several_pos.return_multiple()
+        .unwrap_or_else(|| vec![])
+        .iter()
+        .filter(|pos| match pos.is_phrasal() {
+            Ok(phrasal) => phrasal,
+            Err(_) => false
+        })
+        .count()
     );
 }
 struct Cuboid{
@@ -68,6 +70,27 @@ impl CuboidVar {
             return Self::Square
         } else {
             return Self::Rectangle
+        }
+    }
+}
+
+#[derive(Clone)]
+enum PartOfSpeech {
+    MultiplePOS(Vec<PartOfSpeech>),
+    Noun(bool)
+}
+
+impl PartOfSpeech {
+    fn return_multiple(&self) -> Option<Vec<PartOfSpeech>> {
+        match self {
+            PartOfSpeech::MultiplePOS(multiple) => Some(multiple.to_vec()),
+            _other => None
+        }
+    }
+    fn is_phrasal(&self) -> Result<bool, &str> {
+        match self {
+            PartOfSpeech::Noun(phrasal) => Ok(*phrasal),
+            other => Err("Not a phrasal noun")
         }
     }
 }
