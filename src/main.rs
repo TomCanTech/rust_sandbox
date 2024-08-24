@@ -1,15 +1,16 @@
 
 
 fn main() {
-    let several_pos =  PartOfSpeech::MultiplePOS(vec![PartOfSpeech::Noun(true), PartOfSpeech::Noun(false)]);
+    let several_pos =  PartOfSpeech::MultiplePOS(vec![PartOfSpeech::Noun(true), PartOfSpeech::Noun(true)]);
 
-    println!("There are {} nouns of which {} are phrasal.", several_pos.return_multiple()
-        .unwrap_or_else(|| vec![])
-        .len(),
+    println!("There are {} nouns of which {} are phrasal.", 
         several_pos.return_multiple()
-        .unwrap_or_else(|| vec![])
-        .iter()
-        .filter(|pos| match pos.is_phrasal() {
+            .unwrap_or_else(|| vec![])
+            .len(),
+        several_pos.return_multiple()
+            .unwrap_or_else(|| vec![])
+            .iter()
+            .filter(|pos| match pos.is_phrasal() {
             Ok(phrasal) => phrasal,
             Err(_) => false
         })
